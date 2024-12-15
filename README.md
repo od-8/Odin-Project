@@ -1,2 +1,2 @@
 # Odin-Project-
-Stuff related to odin project
+Code related to the Odin Project
