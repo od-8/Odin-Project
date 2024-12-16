@@ -26,13 +26,14 @@ class MyCar
   end
 
   def spray_paint=(color)
+    self.color = color
     puts "Psshhhh, Your car is now the color #{color}"
   end
 
   attr_accessor :color
   attr_reader :year
 
-  # - 6 lines below can be changed to the 2 above. Work Smater, Not Harder
+  # - 6 lines below can be changed to the 2 above.
   
   #def color=(color)
     #@color = color
