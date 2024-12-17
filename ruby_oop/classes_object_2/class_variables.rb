@@ -15,10 +15,11 @@ class Car
 end
 
 Car.power
-
 Car.new
+Car.power
 Car.new
+Car.power
 Car.new
+Car.power
 Car.new
-
 Car.power
