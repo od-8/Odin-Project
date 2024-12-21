@@ -1,2 +1,2 @@
-# Odin-Project-
+# Odin-Project
 Code related to the Odin Project
