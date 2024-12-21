@@ -16,7 +16,6 @@ class RollsRoyce < Car
   def initialize(m)
     self.model = m
   end
-
   def start
     "The #{self.model}'s engine revs into life..."
   end
