@@ -1,8 +1,6 @@
 puts "Let's play Naughts and crosses"
 puts ""
-puts "The first player is X"
-puts ""
-puts "The second player is O"
+
 
 Squares = [
   ["-", "-", "-"],
