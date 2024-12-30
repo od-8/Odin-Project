@@ -22,10 +22,11 @@ class Places
     @player = letter
 
     if Squares[@row][@column] != "-"
-      puts "Square is full"
+      puts "Cannot play that square"
       $num -= 1
     else
-      Squares[@row][@column] = letter
+      Squares[@row][@column] = ""
+      Squares[@row][@column] << letter
     end
 
     Squares.each do |array|
