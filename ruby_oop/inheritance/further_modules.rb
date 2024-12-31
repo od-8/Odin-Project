@@ -24,7 +24,7 @@ module Car
   class Mclaren
     def model(model)
       puts "This is a Mclaren #{model}"
-    end  
+    end
   end
 
   class Lamborghini
@@ -43,10 +43,10 @@ end
 gto = Car::Ferrari.new
 f1 = Car::Mclaren.new
 hurracan = Car::Lamborghini.new
-#phantom = Car::Lamborghini.new
+# phantom = Car::Lamborghini.new
 
-puts ""
-gto.start("V12")
-f1.model("F1")
+puts ''
+gto.start('V12')
+f1.model('F1')
 hurracan.year(2020)
 Car::RollsRoyce.speed(2, 10)

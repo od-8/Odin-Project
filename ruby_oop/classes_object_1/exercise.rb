@@ -1,4 +1,4 @@
-class MyCar 
+class MyCar
   def initialize(year, color, model)
     @year = year
     @color = color
@@ -34,17 +34,16 @@ class MyCar
   attr_reader :year
 
   # - 6 lines below can be changed to the 2 above.
-  
-  #def color=(color)
-    #@color = color
-  #end
-  #def year
-    #puts "#{@year}"
-  #end
-  
+
+  # def color=(color)
+  # @color = color
+  # end
+  # def year
+  # puts "#{@year}"
+  # end
 end
 
-four_wheels = MyCar.new(2006, "Red", "Ford Raptor")
+four_wheels = MyCar.new(2006, 'Red', 'Ford Raptor')
 
 four_wheels.current_speed
 four_wheels.speed_up(50)
@@ -54,8 +53,8 @@ four_wheels.current_speed
 four_wheels.shutdown
 four_wheels.current_speed
 
-puts ""
-puts four_wheels.color = "Yellow"
+puts ''
+puts four_wheels.color = 'Yellow'
 puts four_wheels.year
-puts ""
-four_wheels.spray_paint = "Green"
+puts ''
+four_wheels.spray_paint = 'Green'

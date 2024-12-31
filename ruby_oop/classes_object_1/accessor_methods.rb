@@ -1,6 +1,7 @@
 class Car
   attr_accessor :make
-  def initialize (company, engine)
+
+  def initialize(company, engine)
     @engine = engine
     @company = company
   end
@@ -9,19 +10,18 @@ class Car
     "My car is a #{make} and has a #{@engine} engine."
   end
 
-  #def make=(make)
-    #@company = make
-  #end
+  # def make=(make)
+  # @company = make
+  # end
 end
 
-supercar = Car.new("Lamborghini Huracane", "g20")
-pickup = Car.new("Ford Raptor", "v12") 
+supercar = Car.new('Lamborghini Huracane', 'g20')
+pickup = Car.new('Ford Raptor', 'v12')
 
-
-supercar.make = "McLaren"
+supercar.make = 'McLaren'
 puts supercar.details
 
-puts ""
+puts ''
 
-pickup.make = "Land Rover"
+pickup.make = 'Land Rover'
 puts pickup.details

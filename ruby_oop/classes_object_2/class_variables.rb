@@ -7,10 +7,10 @@ class Car
   end
 
   def self.power
-    puts ""
+    puts ''
     puts "Horsepower = #{@@horsepower} hp"
     puts "Speed = #{@@max_speed} mph"
-    puts ""
+    puts ''
   end
 end
 

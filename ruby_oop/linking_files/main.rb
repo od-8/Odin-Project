@@ -7,7 +7,7 @@ class Car
     @year = year
     @color = color
 
-    puts "Your Car:"
+    puts 'Your Car:'
     puts " - Make = #{@make}"
     puts " - Model = #{@model}"
     puts " - Year = #{@year}"
@@ -20,16 +20,16 @@ class Car
   include Driftable
 end
 
-puts ""
-my_car = Car.new("Ferrari", "GTO", 1985, "Red")
-puts ""
-my_car.drive("V18")
-puts ""
+puts ''
+my_car = Car.new('Ferrari', 'GTO', 1985, 'Red')
+puts ''
+my_car.drive('V18')
+puts ''
 my_car.brake
-puts ""
+puts ''
 my_car.accelerate(30, 70)
-puts ""
+puts ''
 my_car.deccelerate(70, 30)
-puts ""
+puts ''
 my_car.drift
-puts ""
+puts ''

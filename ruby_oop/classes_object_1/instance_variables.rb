@@ -5,5 +5,5 @@ class Human
   end
 end
 
-Human.new("Jim")
-Human.new("Sam")
+Human.new('Jim')
+Human.new('Sam')

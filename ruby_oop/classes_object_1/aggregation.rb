@@ -1,37 +1,36 @@
 class Cpu
   def initialize
-    puts "CPU created..."
+    puts 'CPU created...'
   end
 end
 
 class Gpu
   def initialize
-    puts "GPU created..."
+    puts 'GPU created...'
   end
 end
 
 class Ram
-  def initialize 
-    puts "Ram created..."
+  def initialize
+    puts 'Ram created...'
   end
 end
 
 class Storage
-  def initialize 
-    puts "Storage created..."
+  def initialize
+    puts 'Storage created...'
   end
 end
 
 class Computer
-  def initialize (cpu, gpu, ram, storage)
+  def initialize(cpu, gpu, ram, storage)
     @cpu = cpu
     @gpu = gpu
     @ram = ram
     @storage = storage
-    puts "Computer created. Contains CPU, GPU, RAM and STORAGE."
+    puts 'Computer created. Contains CPU, GPU, RAM and STORAGE.'
   end
 end
-
 
 my_cpu = Cpu.new
 my_gpu = Gpu.new

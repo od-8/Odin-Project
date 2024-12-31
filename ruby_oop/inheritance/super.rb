@@ -1,5 +1,6 @@
 class Car
   attr_accessor :make, :color, :model, :year
+
   def initialize(make, color, model, year)
     @make = make
     @year = year
@@ -14,7 +15,7 @@ class Ferrari < Car
   end
 end
 
-my_car = Ferrari.new("Ferrari", "Red", "288 GTO", 1985)
+my_car = Ferrari.new('Ferrari', 'Red', '288 GTO', 1985)
 
 puts " - Make = '#{my_car.make}'"
 puts " - Color = '#{my_car.color}'"
