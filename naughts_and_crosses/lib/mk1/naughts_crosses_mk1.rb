@@ -38,7 +38,7 @@ end
 
 #   Horizontal win function
 
-def horizontal_win(squares, letter)
+def horizontal_win(squares, _letter)
   win_o = %w[O O O]
   win_x = %w[X X X]
   if squares.include?(win_o) == true
@@ -51,7 +51,6 @@ def horizontal_win(squares, letter)
     puts ''
   end
   $win = 1
-
 end
 
 #   Vertical win function
@@ -120,6 +119,7 @@ end
 
 def board_is_full(_num)
   return unless $num == 10
+
   puts 'The board is full and nobody has won.'
   puts ''
   $win = 1
@@ -139,7 +139,7 @@ while $win == 0
   letter = nil
   $num += 1
 
-  letter = 
+  letter =
     if $num.even?
       'X'
     else
