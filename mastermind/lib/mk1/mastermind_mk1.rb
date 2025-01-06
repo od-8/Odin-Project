@@ -1,6 +1,6 @@
 # frozen_string_literal: false
 
-require 'colorize'
+#require 'colorize'
 
 # Global vars
 $i = -1
@@ -12,7 +12,7 @@ $num = 0
 class Board
   def initialize(first, second, third, fourth)
     @board = Array.new(5) { Array.new(4) { |_n| '-' } }
-    @winning_combo = Array.new(3)
+    @winning_combo = Array.new(4)
     @winning_combo[0] = first
     @winning_combo[1] = second
     @winning_combo[2] = third
