@@ -1,47 +1,12 @@
 # frozen_string_literal: false
 
-# Global var
- 
 $game_over = 0
 
-# The board class
-class Board
-  @@x = -1
-  @@y = -1
-
-  # test
-  # test 2
-  # test 2
-  
-  def initialize(first, second, third, fourth)
-    @board = Array.new(5) { Array.new(4) { |_n| '-' } }
-    @winning_combo = []
-    @winning_combo = [first, second, third, fourth]
-  end
-
-  def add_colors(one, two, three, four)
-    @@x += 1
-    @board[@@x] = [one, two, three, four]
-  end
-
-  def print_board
-    puts ''
-    @board.each do |array|
-      puts "#{array} \n"
-    end
-    puts ''
-  end
-
-  def is_full?
-    true if @board.all? { |row| !row.include?('-') }
-  end
-
-  def winner
-    @@y += 1
-    right_position = @board[@@y].each_with_index.select { |item, index| @winning_combo[index] == item }.map(&:first)
-    wrong_position = @board[@@y].select { |i| @winning_combo.include?(i) && !right_position.include?(i) }
-
-    # If character is correct and in correct position
+module Positions
+   # If character is correct and in correct position
+   def right_position
+    @y += 1
+    @right_position = @board[@y].each_with_index.select { |item, index| @winning_combo[index] == item }.map(&:first)
     case right_position.length
     when 4
       puts 'Congratulations player 2 you have won this game of Mastermind!'
@@ -54,8 +19,12 @@ class Board
       puts "#{right_position.join('').capitalize} is correct and in the correct position."
       puts ''
     end
+  end
 
-    # If character is correct but not in correct position
+  # If character is correct but not in correct position
+  def wrong_position
+    @z += 1
+    @wrong_position = @board[@z].select { |i| @winning_combo.include?(i) && !@right_position.include?(i) }
     case wrong_position.length
     when 4
       puts 'They are all correct but not in the right positions.'
@@ -68,6 +37,41 @@ class Board
       puts ''
     end
   end
+end
+
+# The board class
+class Board
+  def initialize(first, second, third, fourth)
+    @board = Array.new(10) { Array.new(4) { |_n| '-' } }
+    @mini_board = Array.new(10) { Array.new(4) { |n| n += 1} }
+    @w = -1
+    @x = -1
+    @y = -1
+    @z = -1
+    @winning_combo = [first, second, third, fourth]
+  end
+
+  def print_board
+    @w += 1
+    puts ''
+    puts "+---+---+---+---+"
+    @board.length.times do
+      puts "| #{@board[@w][@w]} | #{@board[@w][@w]} | #{@board[@w][@w]} | #{@board[@w][@w]} |    #{@mini_board[@w]}"
+      puts "+---+---+---+---+"
+    end
+    puts ''
+  end
+
+  def add_colors(one, two, three, four)
+    @x += 1
+    @board[@x] = [one, two, three, four]
+  end
+
+  def full?
+    true if @board.all? { |row| !row.include?('-') }
+  end
+
+  include Positions
 end
 
 puts 'Lets play Mastermind'
@@ -90,14 +94,13 @@ colors = gets.chomp.downcase.split
 until colors.all? { |color| options.include?(color) } && colors.size == 4
   puts 'There must be 4 colors, they must be from the list above and be spelt correctly.'
   puts ''
-  puts 'Player 1 the combination of 4 colors, each sepearted by a space.'
+  puts 'Player 1 the combination of 4 colors, each seperated by a space.'
   colors = gets.chomp.downcase.split
   puts ''
-  color_one, color_two, color_three, color_four = colors
+  colors
 end
 
 color_one, color_two, color_three, color_four = colors
-
 
 board = Board.new(color_one, color_two, color_three, color_four)
 board.print_board
@@ -119,14 +122,15 @@ until $game_over == 1
 
   board.add_colors(guess_one, guess_two, guess_three, guess_four)
 
-  board.winner
+  board.right_position
+  board.wrong_position
 
   board.print_board
 
-  if board.is_full?
-    puts ''
-    puts 'Conratulations player 1 you have won this game of Mastermind!'
-    puts ''
-    $game_over = 1
-  end
+  next unless board.full?
+
+  puts ''
+  puts 'Conratulations player 1 you have won this game of Mastermind!'
+  puts ''
+  $game_over = 1
 end

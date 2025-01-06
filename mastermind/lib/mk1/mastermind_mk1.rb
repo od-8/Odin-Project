@@ -1,6 +1,6 @@
 # frozen_string_literal: false
 
-#require 'colorize'
+# require 'colorize'
 
 # Global vars
 $i = -1
