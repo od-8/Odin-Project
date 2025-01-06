@@ -8,6 +8,8 @@ $game_over = 0
 class Board
   @@x = -1
   @@y = -1
+
+  # test
   
   def initialize(first, second, third, fourth)
     @board = Array.new(5) { Array.new(4) { |_n| '-' } }
