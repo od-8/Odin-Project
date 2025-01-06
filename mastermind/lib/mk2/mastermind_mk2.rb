@@ -80,13 +80,13 @@ options.each do |color|
   puts " - #{color.capitalize}\n"
 end
 
-puts 'Player 1 the combination of four colors, each sepearted by a space.'
+puts 'Player 1 the combination of 4 colors, each sepearted by a space.'
 colors = gets.chomp.downcase.split
 
 until colors.all? { |color| options.include?(color) } && colors.size == 4
   puts 'There must be 4 colors, they must be from the list above and be spelt correctly.'
   puts ''
-  puts 'Player 1 the combination of four colors, each sepearted by a space.'
+  puts 'Player 1 the combination of 4 colors, each sepearted by a space.'
   colors = gets.chomp.downcase.split
   puts ''
   color_one, color_two, color_three, color_four = colors
@@ -99,7 +99,7 @@ board = Board.new(color_one, color_two, color_three, color_four)
 board.print_board
 
 until $game_over == 1
-  puts 'Player 2 input the 4 correct colors, eacb sepearted by a space.'
+  puts 'Player 2 input the 4 correct colors, each sepearted by a space.'
   guesses = gets.chomp.downcase.split
 
   until guesses.all? { |guess| options.include?(guess) } && guesses.size == 4
