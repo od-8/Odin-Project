@@ -11,6 +11,7 @@ class Board
 
   # test
   # test 2
+  # test 2
   
   def initialize(first, second, third, fourth)
     @board = Array.new(5) { Array.new(4) { |_n| '-' } }
