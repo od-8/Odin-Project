@@ -37,34 +37,40 @@ class Board
     right_position = @board[@@y].each_with_index.select { |item, index| @winning_combo[index] == item }.map(&:first)
     wrong_position = @board[@@y].select { |i| @winning_combo.include?(i) && !right_position.include?(i) }
 
-    # If character is in correct and in correct position
+    # If character is correct and in correct position
     case right_position.length
     when 4
       puts 'Congratulations player 2 you have won this game of Mastermind!'
+      puts ''
       $game_over = 1
     when 2..3
       puts "#{right_position.join(' and ').capitalize} are correct and in the right positions."
+      puts ''
     when 1
       puts "#{right_position.join('').capitalize} is correct and in the correct position."
+      puts ''
     end
 
     # If character is correct but not in correct position
     case wrong_position.length
     when 4
       puts 'They are all correct but not in the right positions.'
+      puts ''
     when 2..3
       puts "#{wrong_position.join(' and ').capitalize} are correct but in the wrong position."
+      puts ''
     when 1
       puts "#{wrong_position.join('').capitalize} is correct but in the wrong position."
+      puts ''
     end
   end
 end
 
-puts 'Lets play mastermind'
+puts 'Lets play Mastermind'
 puts ''
-puts 'Player 1 will be guessing.'
+puts 'Player 1 will choose a combination of 4 color.'
 puts ''
-puts 'Player 2 will try to input the 4 correct colors.'
+puts 'Player 2 will try to input the 4 correct colors in the correct order.'
 puts ''
 
 options = %w[red green blue yellow magenta cayan white]
@@ -74,13 +80,13 @@ options.each do |color|
   puts " - #{color.capitalize}\n"
 end
 
-puts 'Player 1 input the four winning colors sepearted by a space.'
+puts 'Player 1 the combination of four colors, each sepearted by a space.'
 colors = gets.chomp.downcase.split
 
 until colors.all? { |color| options.include?(color) } && colors.size == 4
-  puts 'All of the colors must be spelt correctly and be from the list above.'
+  puts 'There must be 4 colors, they must be from the list above and be spelt correctly.'
   puts ''
-  puts 'Player 1 input your four colors sepearted by a space:'
+  puts 'Player 1 the combination of four colors, each sepearted by a space.'
   colors = gets.chomp.downcase.split
   puts ''
   color_one, color_two, color_three, color_four = colors
@@ -93,13 +99,13 @@ board = Board.new(color_one, color_two, color_three, color_four)
 board.print_board
 
 until $game_over == 1
-  puts 'Player 2 input the four winning colors sepearted by a space.'
+  puts 'Player 2 input the 4 correct colors, eacb sepearted by a space.'
   guesses = gets.chomp.downcase.split
 
   until guesses.all? { |guess| options.include?(guess) } && guesses.size == 4
-    puts "All of the colors must be spelt correctly and be from the list above."
+    puts 'There must be 4 colors, they must be from the list above and be spelt correctly.'
     puts ''
-    puts 'Player 2 input your four colors sepearted by a space:'
+    puts 'Player 2 input the 4 correct colors, eacb sepearted by a space.'
     guesses = gets.chomp.downcase.split
     puts ''
     guess_one, guess_two, guess_three, guess_four = guesses
@@ -114,7 +120,9 @@ until $game_over == 1
   board.print_board
 
   if board.is_full?
+    puts ''
     puts 'Conratulations player 1 you have won this game of Mastermind!'
+    puts ''
     $game_over = 1
   end
 end
