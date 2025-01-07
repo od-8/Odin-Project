@@ -2,43 +2,6 @@
 
 $game_over = 0
 
-module Positions
-   # If character is correct and in correct position
-   def right_position
-    @y += 1
-    @right_position = @board[@y].each_with_index.select { |item, index| @winning_combo[index] == item }.map(&:first)
-    case right_position.length
-    when 4
-      puts 'Congratulations player 2 you have won this game of Mastermind!'
-      puts ''
-      $game_over = 1
-    when 2..3
-      puts "#{right_position.join(' and ').capitalize} are correct and in the right positions."
-      puts ''
-    when 1
-      puts "#{right_position.join('').capitalize} is correct and in the correct position."
-      puts ''
-    end
-  end
-
-  # If character is correct but not in correct position
-  def wrong_position
-    @z += 1
-    @wrong_position = @board[@z].select { |i| @winning_combo.include?(i) && !@right_position.include?(i) }
-    case wrong_position.length
-    when 4
-      puts 'They are all correct but not in the right positions.'
-      puts ''
-    when 2..3
-      puts "#{wrong_position.join(' and ').capitalize} are correct but in the wrong position."
-      puts ''
-    when 1
-      puts "#{wrong_position.join('').capitalize} is correct but in the wrong position."
-      puts ''
-    end
-  end
-end
-
 # The board class
 class Board
   def initialize(first, second, third, fourth)
@@ -71,7 +34,37 @@ class Board
     true if @board.all? { |row| !row.include?('-') }
   end
 
-  include Positions
+  # If character is correct and in correct position
+  def position
+    @y += 1
+    right_position = @board[@y].each_with_index.select { |item, index| @winning_combo[index] == item }.map(&:first)
+    wrong_position = @board[@y].select { |i| @winning_combo.include?(i) && !@right_position.include?(i) }
+
+    case right_position.length
+    when 4
+      puts 'Congratulations player 2 you have won this game of Mastermind!'
+      puts ''
+      $game_over = 1
+    when 2..3
+      puts "#{right_position.join(' and ').capitalize} are correct and in the right positions."
+      puts ''
+    when 1
+      puts "#{right_position.join('').capitalize} is correct and in the correct position."
+      puts ''
+    end
+
+    case wrong_position.length
+    when 4
+      puts 'They are all correct but not in the right positions.'
+      puts ''
+    when 2..3
+      puts "#{wrong_position.join(' and ').capitalize} are correct but in the wrong position."
+      puts ''
+    when 1
+      puts "#{wrong_position.join('').capitalize} is correct but in the wrong position."
+      puts ''
+    end
+  end
 end
 
 puts 'Lets play Mastermind'
@@ -122,8 +115,7 @@ until $game_over == 1
 
   board.add_colors(guess_one, guess_two, guess_three, guess_four)
 
-  board.right_position
-  board.wrong_position
+  board.position
 
   board.print_board
 
