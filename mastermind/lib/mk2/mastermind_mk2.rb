@@ -2,48 +2,86 @@
 
 require 'colorize'
 
+$game_over = 0
+
 # The board class
 class Board
   def initialize(one, two, three, four)
-    @board = Array.new(6) { Array.new(4) { |_n| '-' } }
+    @board = Array.new(6) { Array.new(4, '-') }
     @mini_board = Array.new(4) { |n| n + 1}
     @winning_combo = [one, two, three, four]
-    @w = 0
+    @w = -1
+    @i = -1
     puts ''
     puts "@winning_combo = #{@winning_combo}"
   end
 
   def move(one, two, three, four)
-    @one = one
-    @two = two
-    @three = three
-    @four = four
-    @board[@w] = %w[X X X X]
     @w += 1
+    @board[@w] = [one, two, three, four]
+    puts "@w = #{@w}"
   end
 
   def print_board
-    i = 0
     puts ''
+    p @board.flatten
     puts '+---+---+---+---+'
-    @board.length.times do
-      if @board[i].all? { |let| let == 'X'}
-        print "| #{@board[i][0].colorize(@one.to_sym)} "
-        print "| #{@board[i][1].colorize(@two.to_sym)} "
-        print "| #{@board[i][2].colorize(@three.to_sym)} "
-        print "| #{@board[i][3].colorize(@four.to_sym)} |"
-        puts "\n+---+---+---+---+"
-        i += 1 # rubocop:disable Style/IdenticalConditionalBranches
+    @board.each_with_index do |row, i|
+      if row.all? { |cell| cell != '-' }
+        row.each do |color|
+          print "| #{'X'.colorize(color.to_sym)} "
+        end
       else
-        print "| #{@board[i][0..3].join(' | ')} "
-        print '|'
-        puts "\n+---+---+---+---+"
-        i += 1 # rubocop:disable Style/IdenticalConditionalBranches
+        print "| #{row.join(' | ')} "
       end
+      print '|'
+      print "    [ #{@mini_board.join(', ')} ]"
+      puts "\n+---+---+---+---+"
+    end
+    puts ''
+  end
+
+  def position
+    @i += 1
+    right_position = @board[@i].each_with_index.select { |item, index| @winning_combo[index] == item }.map(&:first)
+    wrong_position = @board[@i].select { |i| @winning_combo.include?(i) && !right_position.include?(i) }
+
+    right_position_size = right_position.length
+    wrong_position_size = wrong_position.length
+
+    case right_position_size
+    when 4
+      puts 'Congratulations Player 1 you guessed the combination in time, you have won!'
+      $game_over = 1
+    when 2 || 3
+      puts "#{right_position.join(' and ').capitalize} are correct and in the right positions."
+      puts ''
+    when 1
+      puts "#{right_position.join('').capitalize} is correct and in the correct position."
+      puts ''
+    end
+
+    case wrong_position_size
+    when 4
+      puts 'They are all correct but not in the right positions.'
+    when 2 || 3
+      puts "#{wrong_position.join(' and ').capitalize} are correct but in the wrong position."
+      puts ''
+    when 1
+      puts "#{wrong_position.join('').capitalize} is correct but in the wrong position."
+      puts ''
+    end
+  end
+
+  def full?
+    if @board.flatten.all? { |i| i != '-'}
+      puts 'Player 1 you are out of guesses, congratulations Player 2 you have won!'
+      $game_over = 1
     end
   end
 end
 
+puts ''
 puts 'Input winning combo'
 puts 'Color 1'
 color_one = gets.chomp.downcase
@@ -59,23 +97,7 @@ color_four = gets.chomp.downcase
 
 board = Board.new(color_one, color_two, color_three, color_four)
 
-# board.print_board(color_one, color_two, color_three, color_four)
-
-# puts ''
-# puts ''
-# puts ''
-# puts 'string'.colorize(:green)
-# puts 'string'.colorize(:red)
-# puts 'string'.colorize(:blue)
-# puts 'string'.colorize(:yellow)
-# puts 'string'.colorize(:magenta)
-# puts 'string'.colorize(:cyan)
-# puts 'string'.colorize(:black)
-# puts 'string'.colorize(:white)
-
-i = 0
-while i < 3
-  i += 1
+until $game_over == 1
   puts 'Input four guess'
   puts 'Guess 1'
   guess_one = gets.chomp.downcase
@@ -89,7 +111,12 @@ while i < 3
   puts 'Guess 4'
   guess_four = gets.chomp.downcase
   puts ''
+
   board.move(guess_one, guess_two, guess_three, guess_four)
+
   board.print_board
-  sleep 3
+
+  board.position
+
+  board.full?
 end
