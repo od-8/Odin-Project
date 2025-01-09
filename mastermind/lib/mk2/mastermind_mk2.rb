@@ -14,7 +14,6 @@ class Board
     @w = -1
     @i = -1
     puts ''
-    puts "@winning_combo = #{@winning_combo}"
   end
 
   def move(one, two, three, four)
@@ -26,7 +25,7 @@ class Board
   def print_board
     puts ''
     puts '+---+---+---+---+'
-    @board.each_with_index do |row, i|
+    @board.each_with_index do |row, _i|
       if row.all? { |cell| cell != '-' }
         row.each do |color|
           print "| #{'X'.colorize(color.to_sym)} "
@@ -34,35 +33,29 @@ class Board
       else
         print "| #{row.join(' | ')} "
       end
+
+      row.each_with_index do |item, index|
+        if @winning_combo[index] == item
+          print "|  | #{@mini_board[index].to_s.colorize(:green)} "
+        end
+        if @winning_combo.include?(item) && @winning_combo[index] != item
+          print "|  | #{@mini_board[index].to_s.colorize(:yellow)} "
+        end
+      end
+
       print '|'
-      print "    [ #{@mini_board.join(', ')} ]"
       puts "\n+---+---+---+---+"
+
     end
-    p @winning_combo
     puts ''
   end
 
   def position
     @i += 1
-    @board[@i].each_with_index do |item, index|
-      if @winning_combo[index] == item
-        right_position_index = index
-        puts @mini_board[right_position_index].to_s.colorize(:green)
-      end
-      if @winning_combo.include?(item) && @winning_combo[index] != item
-        wrong_position_index = index
-        puts @mini_board[wrong_position_index].to_s.colorize(:yellow)
-      end
-    end
-
-=begin
     right_position = @board[@i].each_with_index.select { |item, index| @winning_combo[index] == item }.map(&:first)
     wrong_position = @board[@i].select { |i| @winning_combo.include?(i) && !right_position.include?(i) }
 
-    right_position_size = right_position.length
-    wrong_position_size = wrong_position.length
-
-    case right_position_size
+    case right_position.length
     when 4
       puts 'Congratulations Player 1 you guessed the combination in time, you have won!'
       $game_over = 1
@@ -74,7 +67,7 @@ class Board
       puts ''
     end
 
-    case wrong_position_size
+    case wrong_position.length
     when 4
       puts 'They are all correct but not in the right positions.'
     when 2 || 3
@@ -84,7 +77,6 @@ class Board
       puts "#{wrong_position.join('').capitalize} is correct but in the wrong position."
       puts ''
     end
-=end
   end
 
   def full?
