@@ -10,6 +10,7 @@ class Board
     @board = Array.new(6) { Array.new(4, '-') }
     @mini_board = Array.new(4) { |n| n + 1}
     @winning_combo = [one, two, three, four]
+    @legal_colors = %w[blue red green yellow cyan magenta white black]
     @w = -1
     @i = -1
     puts ''
@@ -24,7 +25,6 @@ class Board
 
   def print_board
     puts ''
-    p @board.flatten
     puts '+---+---+---+---+'
     @board.each_with_index do |row, i|
       if row.all? { |cell| cell != '-' }
@@ -38,11 +38,24 @@ class Board
       print "    [ #{@mini_board.join(', ')} ]"
       puts "\n+---+---+---+---+"
     end
+    p @winning_combo
     puts ''
   end
 
   def position
     @i += 1
+    @board[@i].each_with_index do |item, index|
+      if @winning_combo[index] == item
+        right_position_index = index
+        puts @mini_board[right_position_index].to_s.colorize(:green)
+      end
+      if @winning_combo.include?(item) && @winning_combo[index] != item
+        wrong_position_index = index
+        puts @mini_board[wrong_position_index].to_s.colorize(:yellow)
+      end
+    end
+
+=begin
     right_position = @board[@i].each_with_index.select { |item, index| @winning_combo[index] == item }.map(&:first)
     wrong_position = @board[@i].select { |i| @winning_combo.include?(i) && !right_position.include?(i) }
 
@@ -71,13 +84,18 @@ class Board
       puts "#{wrong_position.join('').capitalize} is correct but in the wrong position."
       puts ''
     end
+=end
   end
 
   def full?
-    if @board.flatten.all? { |i| i != '-'}
+    if @board.flatten.all? { |i| i != '-' }
       puts 'Player 1 you are out of guesses, congratulations Player 2 you have won!'
       $game_over = 1
     end
+  end
+
+  def legal_move?(one, two, three, four)
+    true if @legal_colors.include?(one) && @legal_colors.include?(two) && @legal_colors.include?(three) && @legal_colors.include?(four)
   end
 end
 
@@ -111,6 +129,24 @@ until $game_over == 1
   puts 'Guess 4'
   guess_four = gets.chomp.downcase
   puts ''
+
+  until board.legal_move?(guess_one, guess_two, guess_three, guess_four)
+    puts 'There must be 4 colors, they all must be spelt correctly(case insensitive) and they must be from the list above.'
+    puts 'Input four guess'
+    puts 'Input four guess'
+    puts 'Guess 1'
+    guess_one = gets.chomp.downcase
+    puts ''
+    puts 'Guess 2'
+    guess_two = gets.chomp.downcase
+    puts ''
+    puts 'Guess 3'
+    guess_three = gets.chomp.downcase
+    puts ''
+    puts 'Guess 4'
+    guess_four = gets.chomp.downcase
+    puts ''
+  end
 
   board.move(guess_one, guess_two, guess_three, guess_four)
 
