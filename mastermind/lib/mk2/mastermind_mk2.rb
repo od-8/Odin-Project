@@ -6,11 +6,11 @@ $game_over = 0
 
 # The board class
 class Board
-  def initialize(one, two, three, four)
+  def initialize(one = nil, two = nil, three = nil, four = nil)
     @board = Array.new(6) { Array.new(4, '-') }
     @mini_board = Array.new(4) { |n| n + 1}
     @winning_combo = [one, two, three, four]
-    @legal_colors = %w[blue red green yellow cyan magenta white black]
+    @legal_colors = %w[blue red green yellow cyan magenta black]
     @w = -1
     @i = -1
     puts ''
@@ -33,19 +33,18 @@ class Board
       else
         print "| #{row.join(' | ')} "
       end
-
       row.each_with_index do |item, index|
+        print '|  '
         if @winning_combo[index] == item
-          print "|  | #{@mini_board[index].to_s.colorize(:green)} "
-        end
-        if @winning_combo.include?(item) && @winning_combo[index] != item
-          print "|  | #{@mini_board[index].to_s.colorize(:yellow)} "
+          print "|#{@mini_board[index].to_s.colorize(:green)}"
+        elsif @winning_combo.include?(item) && @winning_combo[index] != item
+          print "|#{@mini_board[index].to_s.colorize(:yellow)}"
+        else
+          print "|#{@mini_board[index]}"
         end
       end
-
       print '|'
       puts "\n+---+---+---+---+"
-
     end
     puts ''
   end
@@ -53,35 +52,17 @@ class Board
   def position
     @i += 1
     right_position = @board[@i].each_with_index.select { |item, index| @winning_combo[index] == item }.map(&:first)
-    wrong_position = @board[@i].select { |i| @winning_combo.include?(i) && !right_position.include?(i) }
-
-    case right_position.length
-    when 4
+    if right_position.length == 4
       puts 'Congratulations Player 1 you guessed the combination in time, you have won!'
+      puts ''
       $game_over = 1
-    when 2 || 3
-      puts "#{right_position.join(' and ').capitalize} are correct and in the right positions."
-      puts ''
-    when 1
-      puts "#{right_position.join('').capitalize} is correct and in the correct position."
-      puts ''
-    end
-
-    case wrong_position.length
-    when 4
-      puts 'They are all correct but not in the right positions.'
-    when 2 || 3
-      puts "#{wrong_position.join(' and ').capitalize} are correct but in the wrong position."
-      puts ''
-    when 1
-      puts "#{wrong_position.join('').capitalize} is correct but in the wrong position."
-      puts ''
     end
   end
 
-  def full?
+  def full
     if @board.flatten.all? { |i| i != '-' }
       puts 'Player 1 you are out of guesses, congratulations Player 2 you have won!'
+      puts ''
       $game_over = 1
     end
   end
@@ -92,36 +73,78 @@ class Board
 end
 
 puts ''
-puts 'Input winning combo'
-puts 'Color 1'
+puts 'Lets play mastermind'
+puts ''
+puts 'Player 1 will be guessing.'
+puts ''
+puts 'Player 2 will input the winning combonations.'
+puts ''
+puts 'Player 2:'
+puts '- Input the winnning four color combination'
+puts '- You win if Player 1 runs out of guesses'
+puts ''
+puts ''
+puts 'Player 1:'
+puts '- Input your four color guess untill you win or the board is full'
+puts '- You win if you input the four correct color combination'
+puts ''
+puts 'All the colors you input must be in the list bellow'
+puts ''
+puts 'Colors: '
+possible_colors = %w[blue red green yellow cyan magenta black]
+possible_colors.each do |item|
+  puts "- #{item.capitalize.colorize(item.to_sym)}"
+end
+puts ''
+
+puts ''
+puts 'Player 2 input winning combination'
+puts 'Color one:'
 color_one = gets.chomp.downcase
 puts ''
-puts 'Color 2'
+puts 'Color two:'
 color_two = gets.chomp.downcase
 puts ''
-puts 'Color 3'
+puts 'Color three:'
 color_three = gets.chomp.downcase
 puts ''
-puts 'Color 4'
+puts 'Color four:'
 color_four = gets.chomp.downcase
+
+starter_board = Board.new
+
+until starter_board.legal_move?(color_one, color_two, color_three, color_four)
+  puts 'Player 2 input winning combination'
+  puts 'Color one:'
+  color_one = gets.chomp.downcase
+  puts ''
+  puts 'Color two:'
+  color_two = gets.chomp.downcase
+  puts ''
+  puts 'Color three:'
+  color_three = gets.chomp.downcase
+  puts ''
+  puts 'Color four:'
+  color_four = gets.chomp.downcase
+  puts ''
+end
 
 board = Board.new(color_one, color_two, color_three, color_four)
 
 until $game_over == 1
-  puts 'Input four guess'
-  puts 'Guess 1'
+  puts 'Player 1 input your four guess'
+  puts 'Guess one:'
   guess_one = gets.chomp.downcase
   puts ''
-  puts 'Guess 2'
+  puts 'Guess two:'
   guess_two = gets.chomp.downcase
   puts ''
-  puts 'Guess 3'
+  puts 'Guess three:'
   guess_three = gets.chomp.downcase
   puts ''
-  puts 'Guess 4'
+  puts 'Guess four:'
   guess_four = gets.chomp.downcase
   puts ''
-
   until board.legal_move?(guess_one, guess_two, guess_three, guess_four)
     puts 'There must be 4 colors, they all must be spelt correctly(case insensitive) and they must be from the list above.'
     puts 'Input four guess'
@@ -139,12 +162,8 @@ until $game_over == 1
     guess_four = gets.chomp.downcase
     puts ''
   end
-
   board.move(guess_one, guess_two, guess_three, guess_four)
-
   board.print_board
-
   board.position
-
-  board.full?
+  board.full
 end
