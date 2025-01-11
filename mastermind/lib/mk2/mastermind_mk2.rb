@@ -8,7 +8,7 @@ $game_over = 0
 class Board
   def initialize(one = nil, two = nil, three = nil, four = nil)
     @board = Array.new(10) { Array.new(4, '-') }
-    @mini_board = Array.new(4) { |n| n + 1}
+    @mini_board = Array.new(4) { |n| n + 1 }
     @winning_combo = [one, two, three, four]
     @legal_colors = %w[blue red green yellow cyan magenta black]
     @w = -1
@@ -19,13 +19,11 @@ class Board
   def move(one, two, three, four)
     @w += 1
     @board[@w] = [one, two, three, four]
-    puts "@w = #{@w}"
   end
 
   def print_board
     puts ''
     puts '+---+---+---+---+'
-# =begin
     @board.each_with_index do |row, _i|
       if row.all? { |cell| cell != '-' }
         row.each do |color|
@@ -49,52 +47,51 @@ class Board
     end
     puts ''
   end
-# =end
-=begin
-    @board.each_with_index do |row, _i|
-      row.each_with_index do |item, index|
-        if item != '-'
-          print "| #{'X'.colorize(item.to_sym)} "
-        else
-          print "| #{row.join(' | ')} "
-        end
-        #print '|  '
-        if @winning_combo[index] == item
-          print "|#{@mini_board[index].to_s.colorize(:green)}"
-        elsif @winning_combo.include?(item) && @winning_combo[index] != item
-          print "|#{@mini_board[index].to_s.colorize(:yellow)}"
-        else
-          print "|#{@mini_board[index]}"
-        end
-      end 
+  #     @board.each_with_index do |row, _i|
+  #       row.each_with_index do |item, index|
+  #         if item != '-'
+  #           print "| #{'X'.colorize(item.to_sym)} "
+  #         else
+  #           print "| #{row.join(' | ')} "
+  #         end
+  #         #print '|  '
+  #         if @winning_combo[index] == item
+  #           print "|#{@mini_board[index].to_s.colorize(:green)}"
+  #         elsif @winning_combo.include?(item) && @winning_combo[index] != item
+  #           print "|#{@mini_board[index].to_s.colorize(:yellow)}"
+  #         else
+  #           print "|#{@mini_board[index]}"
+  #         end
+  #       end
+  #
+  #       print '|'
+  #       puts "\n+---+---+---+---+"
+  #     end
+  #     puts ''
+  #   end
 
-      print '|'
-      puts "\n+---+---+---+---+"
-    end
-    puts ''
-  end
-=end
-
-  def position
+  def winner?
     @i += 1
     right_position = @board[@i].each_with_index.select { |item, index| @winning_combo[index] == item }.map(&:first)
-    if right_position.length == 4
-      puts 'Congratulations Player 1 you guessed the combination in time, you have won!'
-      puts ''
-      $game_over = 1
-    end
+    return unless right_position.length == 4
+
+    puts 'Congratulations Player 1 you guessed the combination in time, you have won!'
+    puts ''
+    $game_over = 1
   end
 
-  def full
-    if @board.flatten.all? { |i| i != '-' }
-      puts 'Player 1 you are out of guesses, congratulations Player 2 you have won!'
-      puts ''
-      $game_over = 1
-    end
+  def full?
+    return unless @board.flatten.all? { |i| i != '-' }
+
+    puts 'Player 1 you are out of guesses, congratulations Player 2 you have won!'
+    puts ''
+    $game_over = 1
   end
 
   def legal_move?(one, two, three, four)
-    true if @legal_colors.include?(one) && @legal_colors.include?(two) && @legal_colors.include?(three) && @legal_colors.include?(four)
+    if @legal_colors.include?(one) && @legal_colors.include?(two) && @legal_colors.include?(three) && @legal_colors.include?(four)
+      true
+    end
   end
 end
 
@@ -197,6 +194,6 @@ until $game_over == 1
   end
   board.move(guess_one, guess_two, guess_three, guess_four)
   board.print_board
-  board.position
-  board.full
+  board.winner?
+  board.full?
 end
