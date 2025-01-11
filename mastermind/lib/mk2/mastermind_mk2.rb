@@ -7,7 +7,7 @@ $game_over = 0
 # The board class
 class Board
   def initialize(one = nil, two = nil, three = nil, four = nil)
-    @board = Array.new(6) { Array.new(4, '-') }
+    @board = Array.new(10) { Array.new(4, '-') }
     @mini_board = Array.new(4) { |n| n + 1}
     @winning_combo = [one, two, three, four]
     @legal_colors = %w[blue red green yellow cyan magenta black]
@@ -25,6 +25,7 @@ class Board
   def print_board
     puts ''
     puts '+---+---+---+---+'
+# =begin
     @board.each_with_index do |row, _i|
       if row.all? { |cell| cell != '-' }
         row.each do |color|
@@ -48,6 +49,31 @@ class Board
     end
     puts ''
   end
+# =end
+=begin
+    @board.each_with_index do |row, _i|
+      row.each_with_index do |item, index|
+        if item != '-'
+          print "| #{'X'.colorize(item.to_sym)} "
+        else
+          print "| #{row.join(' | ')} "
+        end
+        #print '|  '
+        if @winning_combo[index] == item
+          print "|#{@mini_board[index].to_s.colorize(:green)}"
+        elsif @winning_combo.include?(item) && @winning_combo[index] != item
+          print "|#{@mini_board[index].to_s.colorize(:yellow)}"
+        else
+          print "|#{@mini_board[index]}"
+        end
+      end 
+
+      print '|'
+      puts "\n+---+---+---+---+"
+    end
+    puts ''
+  end
+=end
 
   def position
     @i += 1
@@ -72,8 +98,16 @@ class Board
   end
 end
 
+starter_board = Board.new
+
 puts ''
 puts 'Lets play mastermind'
+puts ''
+puts 'This is the board:'
+puts 'The numbers on the left are correlated to the positions of the board on the same row.'
+starter_board.print_board
+puts ''
+
 puts ''
 puts 'Player 1 will be guessing.'
 puts ''
@@ -111,9 +145,8 @@ puts ''
 puts 'Color four:'
 color_four = gets.chomp.downcase
 
-starter_board = Board.new
-
 until starter_board.legal_move?(color_one, color_two, color_three, color_four)
+  puts 'There must be 4 colors, they all must be spelt correctly(case insensitive) and they must be from the list above.'
   puts 'Player 2 input winning combination'
   puts 'Color one:'
   color_one = gets.chomp.downcase
