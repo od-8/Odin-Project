@@ -47,28 +47,6 @@ class Board
     end
     puts ''
   end
-  #     @board.each_with_index do |row, _i|
-  #       row.each_with_index do |item, index|
-  #         if item != '-'
-  #           print "| #{'X'.colorize(item.to_sym)} "
-  #         else
-  #           print "| #{row.join(' | ')} "
-  #         end
-  #         #print '|  '
-  #         if @winning_combo[index] == item
-  #           print "|#{@mini_board[index].to_s.colorize(:green)}"
-  #         elsif @winning_combo.include?(item) && @winning_combo[index] != item
-  #           print "|#{@mini_board[index].to_s.colorize(:yellow)}"
-  #         else
-  #           print "|#{@mini_board[index]}"
-  #         end
-  #       end
-  #
-  #       print '|'
-  #       puts "\n+---+---+---+---+"
-  #     end
-  #     puts ''
-  #   end
 
   def winner?
     @i += 1
@@ -129,7 +107,7 @@ end
 puts ''
 
 puts ''
-puts 'Player 2 input winning combination'
+puts 'Player 2 input the winning combination'
 puts 'Color one:'
 color_one = gets.chomp.downcase
 puts ''
@@ -144,7 +122,8 @@ color_four = gets.chomp.downcase
 
 until starter_board.legal_move?(color_one, color_two, color_three, color_four)
   puts 'There must be 4 colors, they all must be spelt correctly(case insensitive) and they must be from the list above.'
-  puts 'Player 2 input winning combination'
+  puts ''
+  puts 'Player 2 input the winning combination'
   puts 'Color one:'
   color_one = gets.chomp.downcase
   puts ''
@@ -162,7 +141,7 @@ end
 board = Board.new(color_one, color_two, color_three, color_four)
 
 until $game_over == 1
-  puts 'Player 1 input your four guess'
+  puts 'Player 1 input your four guesses'
   puts 'Guess one:'
   guess_one = gets.chomp.downcase
   puts ''
@@ -176,9 +155,9 @@ until $game_over == 1
   guess_four = gets.chomp.downcase
   puts ''
   until board.legal_move?(guess_one, guess_two, guess_three, guess_four)
-    puts 'There must be 4 colors, they all must be spelt correctly(case insensitive) and they must be from the list above.'
-    puts 'Input four guess'
-    puts 'Input four guess'
+    puts 'There must be 4 colors, they must all be spelt correctly(case insensitive) and they must be from the list above.'
+    puts ''
+    puts 'Player 1 input your four guesses'
     puts 'Guess 1'
     guess_one = gets.chomp.downcase
     puts ''
