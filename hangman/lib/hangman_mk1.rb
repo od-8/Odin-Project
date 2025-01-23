@@ -41,7 +41,7 @@ class Board
     puts "Guesses left = #{@guesses_left}"
   end
 
-  # Adds correct letter onto the board, add incorrect ones to the @wrong_guesses array and print the number of guesses left
+  # Move functionality
   def move(letter = '_')
     if !@wrong_guesses.include?(letter) && !@board.include?(letter)
       @guesses_left -= 1

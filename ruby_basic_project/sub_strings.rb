@@ -12,7 +12,7 @@ def substrings(word, dictionary)
     else
       str = 'NO SUBSTRINGS FOUND'
     end
-  end
+  end``
   puts ''
   puts str
   puts ''
