@@ -1,5 +1,0 @@
-require_relative 'functions/drift'
-require_relative 'functions/deccelerate'
-require_relative 'functions/accelerate'
-require_relative 'functions/brake'
-require_relative 'functions/drive'
