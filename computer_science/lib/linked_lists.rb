@@ -8,11 +8,12 @@ class LinkedList
 
   # Adds item to end of list
   def append(item)
-    new_node = Node.new(item, nil)
+    new_node = Node.new(item, nil, @tail)
     if @head.nil?
       @tail = new_node
       @head = new_node
     else
+      @previous_node = @tail
       @tail.next_node = new_node
       @tail = new_node  
     end
@@ -57,8 +58,9 @@ class LinkedList
 
   # Remove last node in list
   def pop
-    @num -= 1
-    @tail.value = at_index(@num)
+    node = @head
+    @tail = @tail.previous_node
+    @tail.next_node = nil
   end
 
   # Checks if list contains node
@@ -97,9 +99,10 @@ end
 
 
 class Node
-  attr_accessor :value, :next_node
-  def initialize(val, node)
+  attr_accessor :value, :next_node, :previous_node
+  def initialize(val, node, prev_node = nil)
     @value = val
     @next_node = node
+    @previous_node = prev_node
   end
 end
