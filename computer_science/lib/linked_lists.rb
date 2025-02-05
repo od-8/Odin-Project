@@ -58,7 +58,6 @@ class LinkedList
 
   # Remove last node in list
   def pop
-    node = @head
     @tail = @tail.previous_node
     @tail.next_node = nil
   end
