@@ -1,3 +1,4 @@
+
 class HashMap
   def initialize
     @load_factor = 0.75
