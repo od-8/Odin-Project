@@ -3,7 +3,6 @@ class LinkedList
     @head = nil
     @tail = nil
     @size = 0
-    @num = @size
   end
 
   # Adds item to end of list
