@@ -48,6 +48,16 @@ class Tree
     end
   end
 
+  def delete(value, root = @root)
+    if root&.left_child.nil? && root&.left_child.nil?
+      puts 'nil'
+      root.data = 0
+    elsif value < root.data
+      delete(value, root.left_child)
+    elsif value > root.data
+      delete(value, root.right_child)
+    end
+  end
   # Find the node of the provided value, returns nil if no matches
   def find(value, root = @root)
     if root&.data.nil?
@@ -63,4 +73,5 @@ class Tree
 end
 
 tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
+tree.delete(5)
 tree.pretty_print
