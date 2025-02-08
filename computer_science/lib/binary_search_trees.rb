@@ -12,7 +12,6 @@ class Tree
 
   def initialize(array)
     @root = build_tree(array)
-    # p @root
   end
 
   def build_tree(array)
@@ -37,10 +36,21 @@ class Tree
 
   def insert(value, root = @root)
 
+    if root&.data.nil?
+      
+    elsif value < root.data
+      insert(value, root.left_child)
+    elsif value > root.data
+      insert(value, root.right_child)
+    end
+
+    p root
   end
 end
 
 tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
 tree.pretty_print
 tree.insert(12)
+puts ''
+tree.pretty_print
 
