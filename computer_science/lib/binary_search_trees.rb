@@ -48,12 +48,26 @@ class Tree
     end
   end
 
+
+  # The method is not finished and needs work 
+  def delete(value, root = @root)
+    if root&.left_child.left_child.nil? && root&.left_child.right_child.nil?
+      root.left_child = nil
+    elsif root&.right_child.left_child.nil? && root&.right_child.right_child.nil?
+      root.right_child = nil
+    elsif value < root.data
+      delete(value, root.left_child)
+    elsif value > root.data
+      delete(value, root.right_child)
+    end
+  end
+
   # Find the node of the provided value, returns nil if no matches
   def find(value, root = @root)
     if root&.data.nil?
       puts "There are no nodes that have the value of: #{value}."
     elsif root.data == value
-      puts "Node: #{root}, Value: #{value}."
+      puts root
     elsif value < root.data
       find(value, root.left_child)
     elsif value > root.data
@@ -64,3 +78,7 @@ end
 
 tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
 tree.pretty_print
+tree.delete(9)
+puts ''
+tree.pretty_print
+# tree.find(9)
