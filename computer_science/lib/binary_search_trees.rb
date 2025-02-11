@@ -1,6 +1,7 @@
 class Node
   attr_accessor :data, :left_child, :right_child
-  def initialize(data = nil)
+  def initialize(data = nil, prev_node = nil)
+    #@prev_node = nil
     @data = data
     @left_child = nil
     @right_child = nil
@@ -15,16 +16,16 @@ class Tree
   end
 
   # Creates the tree
-  def build_tree(array)
+  def build_tree(array, node)
     return nil if array.empty?
 
     array = array.sort.uniq
     middle = array.length / 2
 
-    root = Node.new(array[middle])
+    root = Node.new(array[middle], )
 
-    root.left_child = build_tree(array[0...middle])
-    root.right_child = build_tree(array[middle+1...])
+    root.left_child = build_tree(array[0...middle,])
+    root.right_child = build_tree(array[middle+1...], root)
 
     return root
   end
@@ -49,17 +50,9 @@ class Tree
   end
 
 
-  # The method is not finished and needs work 
+  # Will do delete later, stuff doing it now
   def delete(value, root = @root)
-    if root&.left_child.left_child.nil? && root&.left_child.right_child.nil?
-      root.left_child = nil
-    elsif root&.right_child.left_child.nil? && root&.right_child.right_child.nil?
-      root.right_child = nil
-    elsif value < root.data
-      delete(value, root.left_child)
-    elsif value > root.data
-      delete(value, root.right_child)
-    end
+
   end
   
   # Find the node of the provided value, returns nil if no matches
@@ -74,7 +67,13 @@ class Tree
       find(value, root.right_child)
     end
   end
+
+  def level_order()
 end
 
 tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
+tree.pretty_print
+
+puts ''
+
 tree.pretty_print
