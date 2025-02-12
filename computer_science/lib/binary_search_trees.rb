@@ -1,7 +1,6 @@
 class Node
   attr_accessor :data, :left_child, :right_child
-  def initialize(data = nil, prev_node = nil)
-    #@prev_node = nil
+  def initialize(data = nil)
     @data = data
     @left_child = nil
     @right_child = nil
@@ -16,16 +15,16 @@ class Tree
   end
 
   # Creates the tree
-  def build_tree(array, node)
+  def build_tree(array)
     return nil if array.empty?
 
     array = array.sort.uniq
     middle = array.length / 2
 
-    root = Node.new(array[middle], )
+    root = Node.new(array[middle])
 
-    root.left_child = build_tree(array[0...middle,])
-    root.right_child = build_tree(array[middle+1...], root)
+    root.left_child = build_tree(array[0...middle])
+    root.right_child = build_tree(array[middle+1...])
 
     return root
   end
@@ -68,7 +67,41 @@ class Tree
     end
   end
 
-  def level_order()
+  def level_order(block, queue = [], root = @root)
+    p queue
+    puts ''
+    puts ''
+    unless root&.left_child.nil? && root&.right_child.nil?
+      level_order(block, [root.left_child.data, root.right_child&.data], root.left_child)
+      level_order(block, [root.left_child.data, root.right_child&.data], root.right_child)
+    end
+  end
+
+  def level_order(block, queue = [], root = @root, array = [])
+    puts root.data
+    puts ''
+
+    if queue.empty?
+      queue << root.left_child
+      queue << root.right_child
+    end
+
+    queue.each { |item| p item.data }
+    puts ''
+
+    #2.times do
+    until array.all? { |item| item.left_child.nil? && item.right_child.nil? && item != nil} 
+      queue.each do |item|
+        array << item.left_child if item.left_child != nil
+        array << item.right_child if item.right_child != nil
+      end
+
+      array.each { |item| p item.data}
+      puts ''
+      queue = array
+      array = []
+    end
+  end
 end
 
 tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
@@ -76,4 +109,5 @@ tree.pretty_print
 
 puts ''
 
+tree.level_order(567)
 tree.pretty_print
