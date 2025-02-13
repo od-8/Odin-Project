@@ -79,35 +79,40 @@ class Tree
 
   def level_order(block, queue = [], root = @root, array = [])
     puts root.data
-    puts ''
 
     if queue.empty?
       queue << root.left_child
       queue << root.right_child
     end
 
-    queue.each { |item| p item.data }
+    queue.each { |item| print "#{item.data} " }
     puts ''
 
-    #2.times do
-    until array.all? { |item| item.left_child.nil? && item.right_child.nil? && item != nil} 
+    until array.all? { |item| item.left_child.nil? && item.right_child.nil? && item != nil}  && array.length > 0
+      array = []
+
       queue.each do |item|
         array << item.left_child if item.left_child != nil
         array << item.right_child if item.right_child != nil
       end
 
-      array.each { |item| p item.data}
+      array.each { |item| print "#{item.data} "}
       puts ''
+
       queue = array
-      array = []
     end
+    puts ''
   end
 end
 
-tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
-tree.pretty_print
+#tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 234])
+#tree.pretty_print
 
 puts ''
 
-tree.level_order(567)
-tree.pretty_print
+#tree.level_order(567)
+#tree.pretty_print
+
+def block
+
+end
