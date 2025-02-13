@@ -49,7 +49,7 @@ class Tree
   end
 
 
-  # Will do delete later, stuff doing it now
+  # Will do delete later, cant be bothered rn
   def delete(value, root = @root)
 
   end
@@ -67,28 +67,16 @@ class Tree
     end
   end
 
-  def level_order(block, queue = [], root = @root)
-    p queue
-    puts ''
-    puts ''
-    unless root&.left_child.nil? && root&.right_child.nil?
-      level_order(block, [root.left_child.data, root.right_child&.data], root.left_child)
-      level_order(block, [root.left_child.data, root.right_child&.data], root.right_child)
-    end
-  end
-
-  def level_order(block, queue = [], root = @root, array = [])
-    puts root.data
-
+  # Goes through tree in breadth-first level order
+  def level_order(root = @root, queue = [], array = [])
     if queue.empty?
-      queue << root.left_child
-      queue << root.right_child
+      queue << root
+      yield root
     end
 
-    queue.each { |item| print "#{item.data} " }
-    puts ''
-
-    until array.all? { |item| item.left_child.nil? && item.right_child.nil? && item != nil}  && array.length > 0
+    # Checks if all the items have no children, the array.length makes it so it only ends when the array has elements with no children
+    # If the array.length was not included it would end the moment array = [] which is the first iteration
+    until array.all? { |item| item.left_child.nil? && item.right_child.nil? && item != nil} && array.length > 0
       array = []
 
       queue.each do |item|
@@ -96,23 +84,14 @@ class Tree
         array << item.right_child if item.right_child != nil
       end
 
-      array.each { |item| print "#{item.data} "}
-      puts ''
-
       queue = array
+      array.each { |node| yield node}
     end
-    puts ''
   end
+
+
 end
 
-#tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 234])
-#tree.pretty_print
-
+tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 234])
+tree.level_order { |node| puts node.data}
 puts ''
-
-#tree.level_order(567)
-#tree.pretty_print
-
-def block
-
-end
