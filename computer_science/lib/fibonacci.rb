@@ -4,10 +4,10 @@ def fibs(n)
   if n < 2
     puts "There is only one number at that position: #{array[n]}."
   else
-    (n -= 2).times do |n|
-      array.push(array[n] + array[n += 1])
+    (n - 2).times do |n|
+      array.push(array[n] + array[n + 1])
     end
-    puts "Here are the first #{array.length + 1} digits:" 
+    puts "Here are the first #{array.length + 1} digits:"
     puts "In order: #{array.join(', ')}"
   end
 end

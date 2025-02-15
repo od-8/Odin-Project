@@ -68,15 +68,15 @@ class Tree
   end
 
   # Goes through tree in breadth-first level order
-  def level_order(root = @root, queue = [], array = [])
+  def level_order(queue = [], array = [])
     if queue.empty?
-      queue << root
-      yield root
+      queue << @root
+      yield @root
     end
 
     # Checks if all the items have no children, the array.length makes it so it only ends when the array has elements with no children
     # If the array.length was not included it would end the moment array = [] which is the first iteration
-    until array.all? { |item| item.left_child.nil? && item.right_child.nil? && item != nil} && array.length > 0
+    until array.all? { |item| item.left_child.nil? && item.right_child.nil? && item != nil} && !array.empty?
       array = []
 
       queue.each do |item|
@@ -89,9 +89,16 @@ class Tree
     end
   end
 
+  def inorder(queue = [], array = [])
+    if queue.empty?
+      queue << @root
+      yield @root
+    end
 
+    
+  end
 end
 
 tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 234])
-tree.level_order { |node| puts node.data}
+tree.level_order { |node| puts node }
 puts ''

@@ -14,7 +14,7 @@ class LinkedList
     else
       @previous_node = @tail
       @tail.next_node = new_node
-      @tail = new_node  
+      @tail = new_node
     end
     @size += 1
   end
@@ -51,7 +51,7 @@ class LinkedList
     if current_index == target_index
       node&.value.nil? ? 'none found' : node.value
     else
-      at_index(target_index, node.next_node, current_index += 1)
+      at_index(target_index, node.next_node, current_index + 1)
     end
   end
 
@@ -63,7 +63,7 @@ class LinkedList
 
   # Checks if list contains node
   def contains?(value, node = @head)
-    if node&.value.nil? 
+    if node&.value.nil?
       false
     elsif value == node.value
       true
@@ -79,25 +79,25 @@ class LinkedList
     elsif value == node.value
       counter
     else
-      find(value, node.next_node, counter += 1)
+      find(value, node.next_node, counter + 1)
     end
   end
 
   # Print the nodes so they are easy to understand
-  def to_s()
+  def to_s
     nodes = []
     node = @head
     until node&.value.nil?
       nodes << "( #{node.value} )"
       node = node.next_node
     end
-    nodes.join(" -> ") + " -> nil"
+    nodes.join(' -> ') + ' -> nil'
   end
 end
 
-
 class Node
   attr_accessor :value, :next_node, :previous_node
+
   def initialize(val, node, prev_node = nil)
     @value = val
     @next_node = node

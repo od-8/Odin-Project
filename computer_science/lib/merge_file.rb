@@ -7,9 +7,7 @@ def merge_sort_v2(arr)
   left = merge_sort(arr[0..half])
   right = merge_sort(arr[half..])
 
-  until left.empty? || right.empty?
-    left[0] <= right[0] ? result << left.shift : result << right.shift
-  end
+  result << (left[0] <= right[0] ? left.shift : right.shift) until left.empty? || right.empty?
 
   result + left + right
 end
