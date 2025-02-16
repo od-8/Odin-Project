@@ -48,12 +48,9 @@ class Tree
     end
   end
 
-
   # Will do delete later, cant be bothered rn
-  def delete(value, root = @root)
+  # def delete(value, root = @root); end
 
-  end
-  
   # Find the node of the provided value, returns nil if no matches
   def find(value, root = @root)
     if root&.data.nil?
@@ -69,10 +66,9 @@ class Tree
 
   # Goes through tree in breadth-first level order
   def level_order(queue = [], array = [])
-    if queue.empty?
-      queue << @root
-      yield @root
-    end
+    queue << @root
+    puts 'Root'
+    yield @root
 
     # Checks if all the items have no children, the array.length makes it so it only ends when the array has elements with no children
     # If the array.length was not included it would end the moment array = [] which is the first iteration
@@ -85,20 +81,149 @@ class Tree
       end
 
       queue = array
-      array.each { |node| yield node}
+      array.each { |node| yield node }
     end
   end
 
-  def inorder(queue = [], array = [])
-    if queue.empty?
-      queue << @root
-      yield @root
+  # Goes through tree in depth-first preorder
+  def preorder(left_queue = [], right_queue = [], left_array = [], right_array = [])
+    full_left_array = []
+    full_right_array = []
+    left_queue << @root.left_child
+    right_queue << @root.right_child
+    puts 'Root'
+    yield @root
+    puts ''
+
+    # Handle left subtree
+    until left_array.all? { |item| item.left_child.nil? && item.right_child.nil? && item != nil} && !left_array.empty?
+      left_array = []
+
+      left_queue.each do |item|
+        left_array << item.left_child if item.left_child != nil
+        left_array << item.right_child if item.right_child != nil
+      end
+
+      left_queue = left_array
+      left_queue.each { |node| full_left_array << node }
     end
 
-    
+    # Handle right subtree
+    until right_array.all? { |item| item.left_child.nil? && item.right_child.nil? && item != nil} && !right_array.empty?
+      right_array = []
+
+      right_queue.each do |item|
+        right_array << item.left_child if item.left_child != nil
+        right_array << item.right_child if item.right_child != nil
+      end
+
+      right_queue = right_array
+      right_array.each { |node| full_right_array << node }
+    end
+    puts 'Left subtree'
+    yield @root.left_child
+    full_left_array.each { |node| yield node }
+    puts ''
+    puts 'Right subtree'
+    yield @root.right_child
+    full_right_array.each { |node| yield node}
+  end
+
+  # Goes through tree in depth-first postorder
+  def postorder(left_queue = [], right_queue = [], left_array = [], right_array = [])
+    full_left_array = []
+    full_right_array = []
+    left_queue << @root.left_child
+    right_queue << @root.right_child
+
+    # Handle left subtree
+    until left_array.all? { |item| item.left_child.nil? && item.right_child.nil? && item != nil} && !left_array.empty?
+      left_array = []
+
+      left_queue.each do |item|
+        left_array << item.left_child if item.left_child != nil
+        left_array << item.right_child if item.right_child != nil
+      end
+
+      left_queue = left_array
+      left_queue.each { |node| full_left_array << node }
+    end
+
+    # Handle right subtree
+    until right_array.all? { |item| item.left_child.nil? && item.right_child.nil? && item != nil} && !right_array.empty?
+      right_array = []
+
+      right_queue.each do |item|
+        right_array << item.left_child if item.left_child != nil
+        right_array << item.right_child if item.right_child != nil
+      end
+
+      right_queue = right_array
+      right_array.each { |node| full_right_array << node }
+    end
+
+    puts 'Left subtree'
+    yield @root.left_child
+    full_left_array.each { |node| yield node }
+    puts ''
+    puts 'Right subtree'
+    yield @root.right_child
+    full_right_array.each { |node| yield node}
+    puts ''
+    puts 'Root'
+    yield @root
+  end
+
+  # Goes through tree in depth-first inorder
+  def inorder(left_queue = [], right_queue = [], left_array = [], right_array = [])
+    full_left_array = []
+    full_right_array = []
+    left_queue << @root.left_child
+    right_queue << @root.right_child
+
+    # Handle left subtree
+    until left_array.all? { |item| item.left_child.nil? && item.right_child.nil? && item != nil} && !left_array.empty?
+      left_array = []
+
+      left_queue.each do |item|
+        left_array << item.left_child if item.left_child != nil
+        left_array << item.right_child if item.right_child != nil
+      end
+
+      left_queue = left_array
+      left_queue.each { |node| full_left_array << node }
+    end
+
+    # Handle right subtree
+    until right_array.all? { |item| item.left_child.nil? && item.right_child.nil? && item != nil} && !right_array.empty?
+      right_array = []
+
+      right_queue.each do |item|
+        right_array << item.left_child if item.left_child != nil
+        right_array << item.right_child if item.right_child != nil
+      end
+
+      right_queue = right_array
+      right_array.each { |node| full_right_array << node }
+    end
+
+    puts 'Left subtree'
+    yield @root.left_child
+    full_left_array.each { |node| yield node }
+    puts ''
+    puts 'Root'
+    yield @root
+    puts ''
+    puts 'Right subtree'
+    yield @root.right_child
+    full_right_array.each { |node| yield node}
   end
 end
 
 tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 234])
-tree.level_order { |node| puts node }
+# tree.level_order { |node| put node.data }
+# tree.preorder { |node| puts node.data }
+# tree.postorder { |node| puts node.data }
+# tree.inorder { |node| puts node.data }
 puts ''
+tree.pretty_print
