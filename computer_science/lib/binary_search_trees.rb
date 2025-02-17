@@ -78,14 +78,15 @@ class Tree
     # Checks if all the items have no children, the array.length makes it so it only ends when the array has elements with no children
     # If the array.length was not included it would end the moment array = [] which is the first iteration
     until array.all? { |item| item.left_child.nil? && item.right_child.nil? && !item.nil? } && !array.empty?
-      array = []
+      array = [] # Every iteration makes the array empty
 
+      # Loops through the array and adds the children of each of the items to the new array
       queue.each do |item|
         array << item.left_child unless item.left_child.nil?
         array << item.right_child unless item.right_child.nil?
       end
 
-      queue = array
+      queue = array # Sets the queue equal to the array so the children of the array before that
       array.each(&block)
     end
   end
