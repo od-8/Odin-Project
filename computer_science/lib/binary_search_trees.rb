@@ -232,12 +232,24 @@ class Tree
     yield @root.right_child
     full_right_array.each(&block)
   end
+
+  def depth(target_node, current_node = @root, index = 1)
+    if target_node == current_node.data
+      p index
+    elsif target_node < current_node.data
+      height(target_node, current_node.left_child, index + 1)
+    elsif target_node > current_node.data
+      height(target_node, current_node.right_child, index + 1)
+    end
+  end
 end
 
-tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 234])
+tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 234, 367, 6754, 6834, 6, 17, 19, 21, 58, 72])
 # tree.level_order { |node| put node.data }
 # tree.preorder { |node| puts node.data }
 # tree.postorder { |node| puts node.data }
 # tree.inorder { |node| puts node.data }
+# tree.depth(6)
+tree.height(6)
 puts ''
 tree.pretty_print
