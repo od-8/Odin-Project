@@ -234,23 +234,36 @@ class Tree
     full_right_array.each(&block)
   end
 
-  def depth(target_node, current_node = @root, index = 1)
+  def depth(target_node, current_node = @root, index = 0)
+    return -1 if current_node.nil?
+
     if target_node == current_node.data
-      p index
+      return index
     elsif target_node < current_node.data
-      height(target_node, current_node.left_child, index + 1)
+      depth(target_node, current_node.left_child, index + 1)
     elsif target_node > current_node.data
-      height(target_node, current_node.right_child, index + 1)
+      depth(target_node, current_node.right_child, index + 1)
+    end
+  end
+
+  def height(node, current_node = @root, left_height = 0, right_height = 0)
+    if current_node&.left_child.nil? && current_node&.right_child.nil?
+      puts "left = #{left_height}"
+      puts "right = #{right_height}"
+      puts ''
+    else
+      height(node, current_node.left_child, left_height + 1, right_height)
+      height(node, current_node.right_child, left_height, right_height + 1)
     end
   end
 end
 
-tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 234, 367, 6754, 6834, 6, 17, 19, 21, 58, 72])
+tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 234])
 # tree.level_order { |node| put node.data }
 # tree.preorder { |node| puts node.data }
 # tree.postorder { |node| puts node.data }
 # tree.inorder { |node| puts node.data }
-# tree.depth(6)
-tree.height(6)
+tree.height(1)
+# p tree.depth(5)
 puts ''
 tree.pretty_print
