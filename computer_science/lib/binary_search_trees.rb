@@ -234,27 +234,30 @@ class Tree
     full_right_array.each(&block)
   end
 
-  def depth(target_node, current_node = @root, index = 0)
-    return -1 if current_node.nil?
+  def depth(node, root = @root, index = 0)
+    # nreturn -1 if root.nil?
 
-    if target_node == current_node.data
+    if node.data == root.data
       return index
-    elsif target_node < current_node.data
-      depth(target_node, current_node.left_child, index + 1)
-    elsif target_node > current_node.data
-      depth(target_node, current_node.right_child, index + 1)
+    elsif node.data < root.data
+      depth(node, root.left_child, index + 1)
+    elsif node.data >  root.data
+      depth(node, root.right_child, index + 1)
     end
   end
 
-  def height(node, current_node = @root, left_height = 0, right_height = 0)
-    if current_node&.left_child.nil? && current_node&.right_child.nil?
-      puts "left = #{left_height}"
-      puts "right = #{right_height}"
-      puts ''
-    else
-      height(node, current_node.left_child, left_height + 1, right_height)
-      height(node, current_node.right_child, left_height, right_height + 1)
-    end
+  def height(node = @root)
+    return -1 if node == nil
+
+    1 + [height(node.left_child), height(node.right_child)].max
+  end
+
+  def function(node = @root)
+    puts "Node = #{node.data}"
+    puts "Height = #{height(node)}"
+    puts "Depth = #{depth(node)}"
+    puts ''
+    function(node.left_child) unless node.left_child == nil
   end
 end
 
@@ -263,7 +266,9 @@ tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 234])
 # tree.preorder { |node| puts node.data }
 # tree.postorder { |node| puts node.data }
 # tree.inorder { |node| puts node.data }
-tree.height(1)
+# tree.height(1)
 # p tree.depth(5)
-puts ''
 tree.pretty_print
+p tree.height
+tree.function
+puts ''
