@@ -72,7 +72,7 @@ class Tree
   # Goes through tree in breadth-first level order
   def level_order(queue = [], array = [], &block)
     queue << @root
-    puts 'Root'
+    # puts 'Root'
     yield @root
 
     # Checks if all the items have no children, the array.length makes it so it only ends when the array has elements with no children
@@ -127,14 +127,11 @@ class Tree
       right_array.each { |node| full_right_array << node }
     end
 
-    puts 'Root'
     yield @root
-    puts ''
-    puts 'Left subtree'
+
     yield @root.left_child
     full_left_array.each(&block)
-    puts ''
-    puts 'Right subtree'
+
     yield @root.right_child
     full_right_array.each(&block)
   end
@@ -175,15 +172,12 @@ class Tree
       right_array.each { |node| full_right_array << node }
     end
 
-    puts 'Left subtree'
     yield @root.left_child
     full_left_array.each(&block)
-    puts ''
-    puts 'Right subtree'
+
     yield @root.right_child
     full_right_array.each(&block)
-    puts ''
-    puts 'Root'
+
     yield @root
   end
 
@@ -222,53 +216,46 @@ class Tree
       right_array.each { |node| full_right_array << node }
     end
 
-    puts 'Left subtree'
     yield @root.left_child
     full_left_array.each(&block)
-    puts ''
-    puts 'Root'
+
     yield @root
-    puts ''
-    puts 'Right subtree'
+
     yield @root.right_child
     full_right_array.each(&block)
   end
 
+  # Goes from root until it reaches input node, then returns distance of that node from root
   def depth(node, root = @root, index = 0)
-    # nreturn -1 if root.nil?
+    return -1 if root.nil?
 
-    if node.data == root.data
-      return index
+    if node == root
+      index
     elsif node.data < root.data
       depth(node, root.left_child, index + 1)
-    elsif node.data >  root.data
+    elsif node.data > root.data
       depth(node, root.right_child, index + 1)
     end
   end
 
+  # Finds the longest branch from the node and returns the furthest away leaf node
   def height(node = @root)
-    return -1 if node == nil
+    return -1 if node.nil?
 
     1 + [height(node.left_child), height(node.right_child)].max
   end
 
-  def function(node = @root)
-    puts "Node = #{node.data}"
-    puts "Height = #{height(node)}"
-    puts "Depth = #{depth(node)}"
-    puts ''
-    function(node.left_child) unless node.left_child == nil
+  # Checks if the left subtree and right subtree have a hight difference of 1 or less ( <= 1 )
+  def balance?
+    # Get the height of both subtree
+    # Check if the differnce between them is 1 or less
+    # Check (if left_tree_height + 1 == right_tree_height) or (if left_tree_height - 1 == right_tree_height)
+    # If the difference is 1 or less return true, else return false
   end
 end
 
 tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 234])
-# tree.level_order { |node| put node.data }
-# tree.preorder { |node| puts node.data }
-# tree.postorder { |node| puts node.data }
-# tree.inorder { |node| puts node.data }
-# tree.height(1)
-# p tree.depth(5)
-tree.pretty_print
-p tree.height
-tree.function
 puts ''
+tree.pretty_print
+puts ''
+# tree.level_order { |node| puts "| Node = #{node.data} | Height = #{tree.height(node)} | Depth = #{tree.depth(node)} |" }
