@@ -43,7 +43,7 @@ class Tree
 
   # Creates a new node at end of branch
   def insert(value, root = @root)
-    if root.left_child.nil? && root.right_child.nil?
+    if root&.left_child.nil? && root&.right_child.nil?
       root.left_child = Node.new(value) if value < root.data
       root.right_child = Node.new(value) if value > root.data
     elsif value < root.data
@@ -246,16 +246,22 @@ class Tree
   end
 
   # Checks if the left subtree and right subtree have a hight difference of 1 or less ( <= 1 )
-  def balance?
-    # Get the height of both subtree
-    # Check if the differnce between them is 1 or less
-    # Check (if left_tree_height + 1 == right_tree_height) or (if left_tree_height - 1 == right_tree_height)
-    # If the difference is 1 or less return true, else return false
+  def balanced?(root = @root)
+    left_tree_height = height(root.left_child)
+    right_tree_height = height(root.right_child)
+
+    if left_tree_height + 1 == right_tree_height || left_tree_height - 1 == right_tree_height || left_tree_height == right_tree_height
+      p true
+    else
+      p false
+    end
+  end
+
+  def rebalance(new_tree = [])
+    level_order { |node| new_tree << node.data}
+    
+    @root = build_tree(new_tree.sort)
   end
 end
 
-tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 234])
-puts ''
-tree.pretty_print
-puts ''
 # tree.level_order { |node| puts "| Node = #{node.data} | Height = #{tree.height(node)} | Depth = #{tree.depth(node)} |" }
