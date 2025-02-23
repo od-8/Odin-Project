@@ -41,9 +41,10 @@ class Tree
     pretty_print(node.left_child, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left_child
   end
 
+=begin
   # Creates a new node at end of branch
   def insert(value, root = @root)
-    p root.data
+    # p root.data
     if root&.left_child.nil? && root&.right_child.nil?
       root.left_child = Node.new(value) if value < root.data
       root.right_child = Node.new(value) if value > root.data
@@ -53,9 +54,25 @@ class Tree
       insert(value, root.right_child)
     end
   end
+=end
+
+  def insert(value, root = @root)
+    if root&.left_child.nil? && root&.right_child.nil?
+      root.left_child = Node.new(value) if value < root.data
+      root.right_child = Node.new(value) if value > root.data
+    elsif root.left_child != nil || root.right_child != nil
+      root.left_child = Node.new(value) if value < root.data && value < root.right_child.data
+      root.right_child = Node.new(value) if value < root.data && value < root.right_child.data
+    else
+      insert(value, root.left_child) if value < root.data
+      insert(value, root.right_child) if value > root.data
+    end
+  end
+
 
   # Will do delete later, cant be bothered rn
   # def delete(value, root = @root); end
+
 
   # Find the node of the provided value, returns nil if no matches
   def find(value, root = @root)
@@ -93,137 +110,36 @@ class Tree
   end
 
   # Goes through tree in depth-first preorder
-  def preorder(left_array = [], right_array = [], &block)
-    full_left_array = []
-    full_right_array = []
-    left_queue = []
-    right_queue = []
+  def preorder(root = @root, array = [], &block)
+    return if root.nil?
 
-    left_queue << @root.left_child
-    right_queue << @root.right_child
+    block_given? ? yield(root) : array << root.data
+    postorder(root.left_child, array, &block)
+		inorder(root.right_child, array, &block)
 
-    # Handle left subtree
-    until left_array.all? { |item| item.left_child.nil? && item.right_child.nil? && !item.nil? } && !left_array.empty?
-      left_array = []
-
-      left_queue.each do |item|
-        left_array << item.left_child unless item.left_child.nil?
-        left_array << item.right_child unless item.right_child.nil?
-      end
-
-      left_queue = left_array
-      left_queue.each { |node| full_left_array << node }
-    end
-
-    # Handle right subtree
-    until right_array.all? { |item| item.left_child.nil? && item.right_child.nil? && !item.nil? } && !right_array.empty?
-      right_array = []
-
-      right_queue.each do |item|
-        right_array << item.left_child unless item.left_child.nil?
-        right_array << item.right_child unless item.right_child.nil?
-      end
-
-      right_queue = right_array
-      right_array.each { |node| full_right_array << node }
-    end
-
-    yield @root
-
-    yield @root.left_child
-    full_left_array.each(&block)
-
-    yield @root.right_child
-    full_right_array.each(&block)
+		array
   end
 
   # Goes through tree in depth-first postorder
-  def postorder(left_array = [], right_array = [], &block)
-    full_left_array = []
-    full_right_array = []
-    left_queue = []
-    right_queue = []
+  def postorder(root = @root, array = [], &block)
+    return if root.nil?
 
-    left_queue << @root.left_child
-    right_queue << @root.right_child
+    postorder(root.left_child, array, &block)
+		inorder(root.right_child, array, &block)
+    block_given? ? yield(root) : array << root.data
 
-    # Handle left subtree
-    until left_array.all? { |item| item.left_child.nil? && item.right_child.nil? && !item.nil? } && !left_array.empty?
-      left_array = []
-
-      left_queue.each do |item|
-        left_array << item.left_child unless item.left_child.nil?
-        left_array << item.right_child unless item.right_child.nil?
-      end
-
-      left_queue = left_array
-      left_queue.each { |node| full_left_array << node }
-    end
-
-    # Handle right subtree
-    until right_array.all? { |item| item.left_child.nil? && item.right_child.nil? && !item.nil? } && !right_array.empty?
-      right_array = []
-
-      right_queue.each do |item|
-        right_array << item.left_child unless item.left_child.nil?
-        right_array << item.right_child unless item.right_child.nil?
-      end
-
-      right_queue = right_array
-      right_array.each { |node| full_right_array << node }
-    end
-
-    yield @root.left_child
-    full_left_array.each(&block)
-
-    yield @root.right_child
-    full_right_array.each(&block)
-
-    yield @root
+		array
   end
 
   # Goes through tree in depth-first inorder
-  def inorder(left_array = [], right_array = [], &block)
-    full_left_array = []
-    full_right_array = []
-    left_queue = []
-    right_queue = []
-    left_queue << @root.left_child
-    right_queue << @root.right_child
+  def inorder(root = @root, array = [], &block)
+    return if root.nil?
 
-    # Handle left subtree
-    until left_array.all? { |item| item.left_child.nil? && item.right_child.nil? && !item.nil? } && !left_array.empty?
-      left_array = []
+		inorder(root.left_child, array, &block)
+    block_given? ? yield(root) : array << root.data
+		inorder(root.right_child, array, &block)
 
-      left_queue.each do |item|
-        left_array << item.left_child unless item.left_child.nil?
-        left_array << item.right_child unless item.right_child.nil?
-      end
-
-      left_queue = left_array
-      left_queue.each { |node| full_left_array << node }
-    end
-
-    # Handle right subtree
-    until right_array.all? { |item| item.left_child.nil? && item.right_child.nil? && !item.nil? } && !right_array.empty?
-      right_array = []
-
-      right_queue.each do |item|
-        right_array << item.left_child unless item.left_child.nil?
-        right_array << item.right_child unless item.right_child.nil?
-      end
-
-      right_queue = right_array
-      right_array.each { |node| full_right_array << node }
-    end
-
-    yield @root.left_child
-    full_left_array.each(&block)
-
-    yield @root
-
-    yield @root.right_child
-    full_right_array.each(&block)
+		array
   end
 
   # Goes from root until it reaches input node, then returns distance of that node from root
@@ -264,5 +180,8 @@ class Tree
     @root = build_tree(new_tree.sort)
   end
 end
+
+tree = Tree.new([1, 2, 3, 4, 5, 6, 7, 8, 9])
+
 
 # tree.level_order { |node| puts "| Node = #{node.data} | Height = #{tree.height(node)} | Depth = #{tree.depth(node)} |" }
