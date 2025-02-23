@@ -1,24 +1,39 @@
 require_relative 'lib/binary_search_trees.rb'
 
-arr = [1, 2, 3, 4, 5, 6, 7, 8, 9] # Array.new(15) { rand(1..100) }
+tree = Tree.new(Array.new(15) { rand(1..100) })
 
-tree = Tree.new(arr.sort)
-
-# tree.level_order { |node| puts "| Node = #{node.data} | Height = #{tree.height(node)} | Depth = #{tree.depth(node)} |" }
-
-# tree.postorder { |node| puts node.data }
-# tree.inorder { |node| puts node.data }
-# tree.preorder { |node| puts node.data }
+tree.balanced?
 
 puts ''
-tree.pretty_print
+tree.level_order { |node| puts node.data }
+puts ''
+tree.preorder { |node| puts node.data }
+puts ''
+tree.postorder { |node| puts node.data }
+puts ''
+tree.inorder { |node| puts node.data }
 puts ''
 
-# tree.insert(90)
+tree.insert(rand(100..999))
+tree.insert(rand(100..999))
+tree.insert(rand(100..999))
+tree.insert(rand(100..999))
+tree.insert(rand(100..999))
+tree.insert(rand(100..999))
 
-# tree.pretty_print
+
+tree.balanced?
 puts ''
+tree.rebalance
+puts ''
+tree.balanced?
 
-# preorder = correct
-# inorder = wrong
-# postorder = wrong
+puts ''
+tree.level_order { |node| puts node.data }
+puts ''
+tree.preorder { |node| puts node.data }
+puts ''
+tree.postorder { |node| puts node.data }
+puts ''
+tree.inorder { |node| puts node.data }
+puts ''

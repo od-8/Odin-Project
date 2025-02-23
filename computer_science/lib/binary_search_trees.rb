@@ -41,38 +41,49 @@ class Tree
     pretty_print(node.left_child, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left_child
   end
 
-=begin
-  # Creates a new node at end of branch
   def insert(value, root = @root)
-    # p root.data
-    if root&.left_child.nil? && root&.right_child.nil?
-      root.left_child = Node.new(value) if value < root.data
-      root.right_child = Node.new(value) if value > root.data
-    elsif value < root.data
-      insert(value, root.left_child)
+    if root.nil?
+      return Node.new(value)
+    end
+    
+    if value < root.data
+      root.left_child = insert(value, root.left_child)
     elsif value > root.data
-      insert(value, root.right_child)
-    end
-  end
-=end
-
-  def insert(value, root = @root)
-    if root&.left_child.nil? && root&.right_child.nil?
-      root.left_child = Node.new(value) if value < root.data
-      root.right_child = Node.new(value) if value > root.data
-    elsif root.left_child != nil || root.right_child != nil
-      root.left_child = Node.new(value) if value < root.data && value < root.right_child.data
-      root.right_child = Node.new(value) if value < root.data && value < root.right_child.data
+      root.right_child = insert(value, root.right_child)
     else
-      insert(value, root.left_child) if value < root.data
-      insert(value, root.right_child) if value > root.data
+      return root
     end
+
+    root
   end
 
 
-  # Will do delete later, cant be bothered rn
-  # def delete(value, root = @root); end
+  def get_successor(node)
+    node = node.right_child
+    while !node.nil? && !node.left_child.nil?
+      node = node.left_child
+    end
+    return node
+  end
 
+  def delete(value, node = @root)
+    return node if node.nil?
+
+    if value < node.data
+      node.left_child = delete(value, node.left_child)
+    elsif value > node.data
+      node.right_child = delete(value, node.right_child)
+    else
+      return node.right_child if node.left_child == nil
+
+      return node.left_child if node.right_child == nil
+
+      successor = get_successor(node)
+      node.data = successor.data
+      root.right_child = delete(successor.data, node.right_child)
+    end
+    return node
+  end
 
   # Find the node of the provided value, returns nil if no matches
   def find(value, root = @root)
@@ -114,8 +125,8 @@ class Tree
     return if root.nil?
 
     block_given? ? yield(root) : array << root.data
-    postorder(root.left_child, array, &block)
-		inorder(root.right_child, array, &block)
+    preorder(root.left_child, array, &block)
+		preorder(root.right_child, array, &block)
 
 		array
   end
@@ -125,7 +136,7 @@ class Tree
     return if root.nil?
 
     postorder(root.left_child, array, &block)
-		inorder(root.right_child, array, &block)
+		postorder(root.right_child, array, &block)
     block_given? ? yield(root) : array << root.data
 
 		array
@@ -180,8 +191,5 @@ class Tree
     @root = build_tree(new_tree.sort)
   end
 end
-
-tree = Tree.new([1, 2, 3, 4, 5, 6, 7, 8, 9])
-
 
 # tree.level_order { |node| puts "| Node = #{node.data} | Height = #{tree.height(node)} | Depth = #{tree.depth(node)} |" }
