@@ -43,6 +43,7 @@ class Tree
 
   # Creates a new node at end of branch
   def insert(value, root = @root)
+    p root.data
     if root&.left_child.nil? && root&.right_child.nil?
       root.left_child = Node.new(value) if value < root.data
       root.right_child = Node.new(value) if value > root.data
