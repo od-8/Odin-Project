@@ -15,36 +15,84 @@ class HashMap
 
   def set(key, value)
     index = hash(key) % @capacity
-    # p index
     raise IndexError if index.negative? || index >= @buckets.length
     bucket = @buckets[index]
 
-    if bucket[0] == key
-      bucket[1] = value
+    # Check if the key already exists
+    bucket.each do |pair|
+      if pair[0] == key
+        pair[1] = value
+        return
+      end
     end
 
-    bucket = [key, value]
+    bucket << [key, value]
     @nodes += 1
- 
-    # Check if size is exceeded
-    if @nodes > @capacity * @load_factor
-      @capacity *= 2
-      @nodes = 0
-      current_bucket = @buckets
-      @buckets = Array.new(@capacity) { [] }
 
-      current_bucket.each do |pair|
-        # @buckets[index] = pair
+    # When load factor is greater than the amount of nodes recreate the hash table with double the capacity
+    if (@capacity * @load_factor) < @nodes
+      prev_buckets = @buckets
+      @capacity *= 2
+      @buckets = Array.new(@capacity) { [] }
+      @nodes = 0
+
+      prev_buckets.each do |pair|
         pair.each do |key, value|
           set(key, value)
         end
       end
     end
   end
+
+  def get(key)
+    @buckets.each do |sub_array|
+      sub_array.each do |pair|
+        if pair[0] == key
+          return pair[1]
+        end
+      end
+    end
+    nil
+  end
+
+  def has?(key)
+    @buckets.each do |sub_array|
+      sub_array.each do |pair|
+        if pair[0] == key
+          return true
+        end
+      end
+    end
+    false
+  end
+
+  def remove(key)
+    #p @buckets
+    @buckets.each_with_index do |sub_array, index|
+      p sub_array
+      p index
+      puts ''
+      #sub_array.each do |pair|
+      #end
+    end
+  end
+
+  def info
+    p @buckets
+    #@buckets.each { |pair| p pair }
+  end
 end
 
-hash = HashMap.new
+test = HashMap.new
 
-hash.set('apple', 'red')
-# hash.set('apple', 'green')
-# hash.set('apple', 'yellow')
+test.set('apple', 'red')
+test.set('banana', 'yellow')
+test.set('carrot', 'orange')
+test.set('dog', 'brown')
+
+#test.info
+puts ''
+
+test.remove('dog')
+
+#test.info
