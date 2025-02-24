@@ -1,4 +1,4 @@
-def merge_sort_v2(arr)
+def merge_sort(arr)
   result = []
   return arr if arr.length < 2
 
@@ -12,4 +12,4 @@ def merge_sort_v2(arr)
   result + left + right
 end
 
-p merge_sort_v2([9, 0, 5, 8, 2, 4, 6, 3, 1, 7])
+p merge_sort([9, 0, 5, 8, 2, 4, 6, 3, 1, 7])
