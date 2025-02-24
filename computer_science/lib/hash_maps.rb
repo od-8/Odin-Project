@@ -67,32 +67,63 @@ class HashMap
   end
 
   def remove(key)
-    #p @buckets
-    @buckets.each_with_index do |sub_array, index|
-      p sub_array
-      p index
-      puts ''
-      #sub_array.each do |pair|
-      #end
+    @buckets.each_with_index do |bucket, index|
+      bucket.each_with_index do |pair, sub_index|
+        if pair[0] == key
+          @buckets.delete_at([index][sub_index])
+          @nodes -= 1
+          return pair[1]
+        end
+      end
     end
+    nil
+  end
+
+  def length(length = 0)
+    @buckets.each do |sub_array|
+      sub_array.each do |pair|
+        if pair[0] != nil
+          length += 1
+        end
+      end
+    end
+    return length
+  end
+
+  def clear
+    @buckets = Array.new(@capacity) { [] }
+    @nodes = 0
+  end
+
+  def keys(keys = [])
+    @buckets.each do |bucket|
+      bucket.each do |pair|
+        keys << pair[0]
+      end
+    end
+    return keys
+  end
+
+  def values(values = [])
+    @buckets.each do |bucket|
+      bucket.each do |pair|
+        values << pair[1]
+      end
+    end
+    return values
+  end
+
+  def entries(pairs = [])
+    @buckets.each do |bucket|
+      bucket.each do |pair|
+        pairs << pair unless pair.empty?
+      end
+    end
+    return pairs
   end
 
   def info
-    p @buckets
-    #@buckets.each { |pair| p pair }
+    # p @buckets
+    @buckets.each { |bucket|  p bucket}
   end
 end
-
-test = HashMap.new
-
-test.set('apple', 'red')
-test.set('banana', 'yellow')
-test.set('carrot', 'orange')
-test.set('dog', 'brown')
-
-#test.info
-puts ''
-
-test.remove('dog')
-
-#test.info
