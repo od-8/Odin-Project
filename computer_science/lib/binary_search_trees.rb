@@ -59,7 +59,7 @@ class Tree
 
 
   def get_successor(node)
-    node = node.right_child
+    node = node.right_child # Goes to right as that is the greater tree
     while !node.nil? && !node.left_child.nil?
       node = node.left_child
     end
@@ -88,9 +88,9 @@ class Tree
   # Find the node of the provided value, returns nil if no matches
   def find(value, root = @root)
     if root&.data.nil?
-      puts "There are no nodes that have the value of: #{value}."
+      return nil #puts "There are no nodes that have the value of: #{value}."
     elsif root.data == value
-      puts root
+      return root
     elsif value < root.data
       find(value, root.left_child)
     elsif value > root.data
@@ -119,6 +119,7 @@ class Tree
       array.each(&block)
     end
   end
+
 
   # Goes through tree in depth-first preorder
   def preorder(root = @root, array = [], &block)
@@ -193,3 +194,7 @@ class Tree
 end
 
 # tree.level_order { |node| puts "| Node = #{node.data} | Height = #{tree.height(node)} | Depth = #{tree.depth(node)} |" }
+tree = Tree.new([1,2,3,4,5,6,7,8,9])
+
+tree.pretty_print
+tree.level_order_rec
