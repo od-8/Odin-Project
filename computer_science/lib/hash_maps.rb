@@ -43,7 +43,7 @@ class HashMap
       end
     end
   end
-
+=begin
   def get(key)
     @buckets.each do |sub_array|
       sub_array.each do |pair|
@@ -74,6 +74,35 @@ class HashMap
           @nodes -= 1
           return pair[1]
         end
+      end
+    end
+    nil
+  end
+=end
+
+  def get(key)
+    index = hash(key) % @capacity
+    raise IndexError if index.negative? || index >= @buckets.length
+
+    @buckets[index].each { |pair| return pair[1] if pair[0] == key}
+    nil
+  end
+
+  def has?(key)
+    index = hash(key) % @capacity
+    raise IndexError if index.negative? || index >= @buckets.length
+
+    @buckets[index].each { |pair| return true if pair[0] == key}
+    false
+  end
+
+  def remove(key)
+    index = hash(key) % @capacity
+    raise IndexError if index.negative? || index >= @buckets.length
+    @buckets[index].each_with_index do |pair, i|
+      if pair[0] == key
+        @buckets.delete(@buckets[index][i])
+        return pair[1]
       end
     end
     nil
@@ -123,7 +152,6 @@ class HashMap
   end
 
   def info
-    # p @buckets
     @buckets.each { |bucket|  p bucket}
   end
 end
